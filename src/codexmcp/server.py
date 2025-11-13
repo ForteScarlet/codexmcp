@@ -167,6 +167,10 @@ async def codex(
             description="Run every command without approvals or sandboxing. Only use when `sandbox` couldn't be applied.",
         ),
     ] = False,
+    profile: Annotated[
+        Optional[str],
+        "Configuration profile name to load from `~/.codex/config.toml`. Default user configuration is applied; this parameter remains inactive unless explicitly specified by the user.",
+    ] = None,
 ) -> Dict[str, Any]:
     """Execute a Codex CLI session and return the results."""
     # Build command as list to avoid injection
@@ -177,6 +181,9 @@ async def codex(
         
     if model is not None:
         cmd.extend(["--model", model])
+        
+    if profile is not None:
+        cmd.extend(["--profile", profile])
         
     if yolo:
         cmd.append("--yolo")
